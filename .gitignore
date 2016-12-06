@@ -1,0 +1,29 @@
+# mac
+*.DS_Store
+
+# ide
+.idea
+
+# libraries
+node_modules
+
+# testing
+coverage
+
+# certificates
+certificates/*
+
+# documentation
+documentation
+
+# js files
+# **/*.js
+# **/*.js.map
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# logs
+npm-debug.log

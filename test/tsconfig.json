@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "pretty": true
+  },
+  "include": [
+    "models/**/*",
+    "specs/**/*"
+  ],
+  "files": [
+    "../utils"
+  ],
+  "exclude": [
+    "../node_modules"
+  ]
+}
