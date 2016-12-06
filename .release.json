@@ -1,8 +1,11 @@
 {
-
+  "buildCommand": "./node_modules/typescript/bin/tsc",
   "github": {
     "release": true,
     "releaseName": "Release %s",
     "tokenRef": "GITHUB_TOKEN"
+  },
+  "dist": {
+    "baseDir": "."
   }
 }
