@@ -6,6 +6,7 @@
     "tokenRef": "GITHUB_TOKEN"
   },
   "dist": {
-    "baseDir": "."
+    "baseDir": ".",
+    "files": ["**/*"]
   }
 }
