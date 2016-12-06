@@ -17,8 +17,8 @@ certificates/*
 documentation
 
 # js files
-**/*.js
-**/*.js.map
+#**/*.js
+#**/*.js.map
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
