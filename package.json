@@ -1,11 +1,11 @@
 {
   "name": "xml-typescript",
-  "version": "1.0.0",
+  "version": "v1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
-    "test": "npm run compile && mocha --reporter spec 'test/specs/**/*.js'"
+    "build": "tsc",
+    "test": "npm run build && mocha --reporter spec 'test/specs/**/*.js'"
   },
   "repository": {
     "type": "git",
