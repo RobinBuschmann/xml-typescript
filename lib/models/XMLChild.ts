@@ -12,8 +12,7 @@ export class XMLChild {
                  options: any = {},
                  descriptor?: TypedPropertyDescriptor<any>): void {
 
-    const targetClass = target.constructor;
-    const element = XMLElement.getXMLElement(targetClass);
+    const element = XMLElement.getXMLElement(target);
 
     options.name = options.name || key;
     options.getter = entity => {

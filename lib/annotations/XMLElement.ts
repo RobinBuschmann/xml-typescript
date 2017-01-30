@@ -5,6 +5,6 @@ export function XMLElement(options: any): Function {
 
   return (target: any) => {
 
-    return XMLElementModel.process(target, options);
+    return XMLElementModel.process(target.prototype, options);
   };
 }

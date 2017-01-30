@@ -63,30 +63,30 @@ export class XMLElement {
     return processAsync(arg);
   }
 
-  static getXMLElement(targetClass: any, createIfNotExist: boolean = true): XMLElement {
+  static getXMLElement(target: any, createIfNotExist: boolean = true): XMLElement {
     const REFLECT_KEY = 'xml:element';
-    let element = Reflect.getMetadata(REFLECT_KEY, targetClass);
+    let element = Reflect.getMetadata(REFLECT_KEY, target);
 
     if (!element && createIfNotExist) {
 
       element = new XMLElement();
-      Reflect.defineMetadata(REFLECT_KEY, element, targetClass);
+      Reflect.defineMetadata(REFLECT_KEY, element, target);
     }
 
     return element;
   }
 
-  static process(targetClass: any, options: any): void {
+  static process(target: any, options: any): void {
 
-    let element = this.getXMLElement(targetClass);
+    let element = this.getXMLElement(target);
 
     element.root = options.root;
   }
 
   private static processSchema(entity: any, isAsync: boolean): any {
-    if (entity && entity.constructor) {
+    if (entity && typeof entity === 'object') {
 
-      const element = XMLElement.getXMLElement(entity.constructor, false);
+      const element = XMLElement.getXMLElement(entity, false);
       if (element) {
 
         return element.getSchema(entity, isAsync);
@@ -107,7 +107,7 @@ export class XMLElement {
       entity = args[1];
     }
 
-    const element = this.getXMLElement(entity.constructor, false);
+    const element = this.getXMLElement(entity, false);
 
     if (!root && element && element.root) {
       root = element.root;
