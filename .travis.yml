@@ -9,5 +9,4 @@ install:
 before_script:
 
 script:
-  - tsc
-  - mocha test/spec/**/*.js
+  - npm test
