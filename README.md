@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/RobinBuschmann/ts-di.png?branch=master)](https://travis-ci.org/RobinBuschmann/xml-typescript)
+[![Build Status](https://travis-ci.org/RobinBuschmann/xml-typescript.png?branch=master)](https://travis-ci.org/RobinBuschmann/xml-typescript)
 
 # xml-decorators
 
