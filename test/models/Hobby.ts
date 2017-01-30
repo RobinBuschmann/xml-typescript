@@ -1,4 +1,4 @@
-import {XMLAttribute} from "../../annotations/XMLAttribute";
+import {XMLAttribute} from "../../lib/annotations/XMLAttribute";
 
 export const HOBBY_NS = 'h';
 

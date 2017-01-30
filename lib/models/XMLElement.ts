@@ -15,28 +15,21 @@ export class XMLElement {
   static serialize(root: string, entity: any): string;
   static serialize(...args: any[]): string {
 
-    let entity;
-    let root;
-
-    if (args.length === 1) {
-      entity = args[0];
-    } else {
-      root = args[0];
-      entity = args[1];
-    }
-
-    const element = this.getXMLElement(entity.constructor, false);
-
-    if (element && element.root) {
-      root = element.root;
-    }
-    if (!root) {
-      throw new Error('No root defined for entity: ' + JSON.stringify(entity));
-    }
-
+    const {root, entity} = this.getRootAndEntity(args);
     const schema = this.getSchema(entity);
 
     return js2xmlparser.parse(root, schema);
+  }
+
+  static serializeAsync(entity: any): Promise<string>;
+  static serializeAsync(root: string, entity: any): Promise<string>;
+  static serializeAsync(...args: any[]): Promise<string> {
+
+    const {root, entity} = this.getRootAndEntity(args);
+
+    return this.getSchemaAsync(entity)
+      .then(schema => js2xmlparser.parse(root, schema))
+      ;
   }
 
   static getSchema(entities: any[]): any;
@@ -100,6 +93,30 @@ export class XMLElement {
       }
     }
     return entity;
+  }
+
+  private static getRootAndEntity(args: any[]): {root: string, entity: any} {
+
+    let entity;
+    let root;
+
+    if (args.length === 1) {
+      entity = args[0];
+    } else {
+      root = args[0];
+      entity = args[1];
+    }
+
+    const element = this.getXMLElement(entity.constructor, false);
+
+    if (!root && element && element.root) {
+      root = element.root;
+    }
+    if (!root) {
+      throw new Error('No root defined for entity: ' + JSON.stringify(entity));
+    }
+
+    return {root, entity};
   }
 
   addAttribute(attribute: XMLAttribute): void {

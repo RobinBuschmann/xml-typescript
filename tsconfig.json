@@ -7,17 +7,17 @@
     "declaration": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "pretty": true
+    "pretty": true,
+    "lib": ["es6"]
   },
   "include": [
-    "annotations/**/*",
-    "models/**/*"
+    "lib/**/*",
+    "test/**/*"
   ],
   "files": [
-    "./utils"
+    "index.ts"
   ],
   "exclude": [
-    "node_modules",
-    "documentation"
+    "node_modules"
   ]
 }

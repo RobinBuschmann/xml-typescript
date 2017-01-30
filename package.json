@@ -1,11 +1,12 @@
 {
-  "name": "xml-typescript",
-  "version": "v1.0.0-beta",
-  "description": "",
+  "name": "xml-decorators",
+  "version": "1.0.1",
+  "description": "Decorators for xml serialization",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && mocha --reporter spec 'test/specs/**/*.js'"
+    "pretest": "npm run build",
+    "test": "mocha 'test/specs/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -17,20 +18,22 @@
     "url": "https://github.com/RobinBuschmann/xml-typescript/issues"
   },
   "homepage": "https://github.com/RobinBuschmann/xml-typescript#readme",
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.8"
+  },
   "dependencies": {
     "@types/bluebird": "3.0.36",
-    "@types/es6-shim": "0.31.32",
     "@types/lodash": "4.14.42",
     "@types/reflect-metadata": "0.0.5",
     "bluebird": "3.4.6",
     "es6-shim": "0.35.2",
     "js2xmlparser": "2.0.2",
-    "lodash": "4.17.2",
-    "reflect-metadata": "0.1.8"
+    "lodash": "4.17.2"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
     "@types/mocha": "2.2.33",
+    "reflect-metadata": "^0.1.8",
     "chai": "3.5.0",
     "mocha": "3.2.0",
     "tslint": "4.0.2",

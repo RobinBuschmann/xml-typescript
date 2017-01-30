@@ -2,14 +2,14 @@ import 'es6-shim';
 import {expect} from 'chai';
 import {Person, PERSON_NS} from "../models/Person";
 import {Hobby, HOBBY_NS} from "../models/Hobby";
-import {XMLElement} from "../../models/XMLElement";
-import {ns, ATTRIBUTE_PROPERTY} from "../../utils";
+import {XMLElement} from "../../lib/models/XMLElement";
+import {ns, ATTRIBUTE_PROPERTY} from "../../lib/utils";
 
 const elisa = new Person('Elisa', 'Perfect', 25);
 const robin = new Person('Robin', 'Buschmann', 29);
 const hobbies = [
   new Hobby('reading', 'loves to read books, magazines and web articles'),
-  new Hobby('listening to Music', 'loves to listen to alternative and post-hardcore music'),
+  new Hobby('listening to Music', 'loves to listen to rock music'),
   new Hobby('travelling', 'loves to travel around the world'),
 ];
 elisa.addFriend(robin);
@@ -91,12 +91,26 @@ describe("Person", () => {
 
   describe("xml", () => {
 
-    const xml = XMLElement.serialize(elisa);
-
     it(`should be defined and of type string`, () => {
+
+      const xml = XMLElement.serialize(elisa);
 
       expect(xml).not.to.be.undefined;
       expect(typeof xml).to.equal('string');
+    });
+
+    describe("async process", () => {
+
+      it(`should be defined and of type string`, () =>
+        XMLElement
+          .serializeAsync('great-person', elisa)
+          .then(xml => {
+
+            expect(xml).not.to.be.undefined;
+            expect(typeof xml).to.equal('string');
+          })
+      );
+
     });
 
   });
