@@ -10,8 +10,8 @@ export function XMLAttribute(...args: any[]): void|Function {
 
     return (target: any, key: string, descriptor?: TypedPropertyDescriptor<any>) => {
 
-      return XMLAttributeModel.process(target, key, args[0], descriptor);
+      return XMLAttributeModel.annotate(target, key, args[0], descriptor);
     };
   }
-  return XMLAttributeModel.process(args[0], args[1], void 0, args[2]);
+  return XMLAttributeModel.annotate(args[0], args[1], void 0, args[2]);
 }

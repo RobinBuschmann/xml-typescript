@@ -10,8 +10,8 @@ export function XMLChild(...args: any[]): void|Function {
 
     return (target: any, key: string, descriptor?: TypedPropertyDescriptor<any>) => {
 
-      return XMLChildModel.process(target, key, args[0], descriptor);
+      return XMLChildModel.annotate(target, key, args[0], descriptor);
     };
   }
-  return XMLChildModel.process(args[0], args[1], void 0, args[2]);
+  return XMLChildModel.annotate(args[0], args[1], void 0, args[2]);
 }

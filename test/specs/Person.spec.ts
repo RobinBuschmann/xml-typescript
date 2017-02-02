@@ -2,7 +2,7 @@ import 'es6-shim';
 import {expect} from 'chai';
 import {Person, PERSON_NS} from "../models/Person";
 import {Hobby, HOBBY_NS} from "../models/Hobby";
-import {XMLElement} from "../../lib/models/XMLElement";
+import {xml, xmlAttribute, xmlChild} from "../../index";
 import {ns, ATTRIBUTE_PROPERTY} from "../../lib/utils";
 
 const elisa = new Person('Elisa', '_', 25);
@@ -16,11 +16,31 @@ elisa.addFriend(robin);
 elisa.addHobbies(hobbies);
 elisa.addPets(['dog', 'cat']);
 
+const personXmlElement = xml.getXMLElement(elisa);
+const PS_NS_URL = 'http://person.example.com';
+
+if (personXmlElement) {
+
+  personXmlElement.addAttribute(xmlAttribute.createAttribute({
+    name: 'ps',
+    namespace: 'xmlns',
+    value: PS_NS_URL,
+    restrictTo: [elisa]
+  }));
+
+  personXmlElement.addChild(xmlChild.createXmlChild({
+    name: 'thoughtful',
+    namespace: PERSON_NS,
+    value: true,
+    restrictTo: [elisa]
+  }));
+}
+
 describe("Person", () => {
 
   describe("schema", () => {
 
-    const schema = XMLElement.getSchema(elisa);
+    const schema = xml.getSchema(elisa);
 
     describe("attributes", () => {
 
@@ -31,11 +51,17 @@ describe("Person", () => {
         expect(attributes[ns(PERSON_NS, 'firstname')]).to.equal(elisa.getFirstname());
         expect(attributes[ns(PERSON_NS, 'fullname')]).to.equal(elisa.fullname);
         expect(attributes[ns(PERSON_NS, 'age')]).to.equal(elisa.getAge());
+        expect(attributes[ns('xmlns', PERSON_NS)]).to.equal(PS_NS_URL);
       });
 
     });
 
     describe("childs", () => {
+
+      it(`should have dynamic child "thoughtful"`, () => {
+
+        expect(schema).to.have.property(ns(PERSON_NS, 'thoughtful'), true);
+      });
 
       it(`should have child hobbies named as "hobby"`, () => {
 
@@ -75,12 +101,22 @@ describe("Person", () => {
         expect(schema.pets.pet instanceof Array).to.be.true;
       });
 
+
+      it(`should have friends with no "xmlns:${PERSON_NS}" attribute and no "thoughtful" child`, () => {
+
+        const friend = schema[ns(PERSON_NS, 'friend')][0];
+        const friendAttributes = friend[ATTRIBUTE_PROPERTY];
+
+        expect(friend).not.to.have.property(ns(PERSON_NS, 'thoughtful'));
+        expect(friendAttributes).not.to.have.property(ns('xmlns', PERSON_NS));
+      });
+
     });
 
     describe("async process", () => {
 
       it(`should result in the same schema value as schema from sync process`, () =>
-        XMLElement
+        xml
           .getSchemaAsync(elisa)
           .then(asyncSchema => expect(asyncSchema).to.deep.equal(schema))
       );
@@ -93,21 +129,21 @@ describe("Person", () => {
 
     it(`should be defined and of type string`, () => {
 
-      const xml = XMLElement.serialize(elisa);
+      const result = xml.serialize(elisa);
 
-      expect(xml).not.to.be.undefined;
-      expect(typeof xml).to.equal('string');
+      expect(result).not.to.be.undefined;
+      expect(typeof result).to.equal('string');
     });
 
     describe("async process", () => {
 
       it(`should be defined and of type string`, () =>
-        XMLElement
+        xml
           .serializeAsync('great-person', elisa)
-          .then(xml => {
+          .then(result => {
 
-            expect(xml).not.to.be.undefined;
-            expect(typeof xml).to.equal('string');
+            expect(result).not.to.be.undefined;
+            expect(typeof result).to.equal('string');
           })
       );
 

@@ -4,6 +4,8 @@ import * as _ from "lodash";
 import {ns} from "../utils";
 import {IXMLChildOptions} from "../interfaces/IXMLChildOptions";
 import {IFullXMLChildOptions} from "../interfaces/IFullXMLChildOptions";
+import {ICustomXMLChildOptions} from "../interfaces/ICustomXMLChildOptions";
+import {createCustomGetter} from "../utils";
 
 type Tree = {name: string; attributes: {[name: string]: string}};
 
@@ -11,10 +13,10 @@ export class XMLChild {
 
   private name: string;
 
-  static process(target: any,
-                 key: string,
-                 options: IXMLChildOptions = {},
-                 descriptor?: TypedPropertyDescriptor<any>): void {
+  static annotate(target: any,
+                  key: string,
+                  options: IXMLChildOptions = {},
+                  descriptor?: TypedPropertyDescriptor<any>): void {
 
     const element = XMLElement.getOrCreateIfNotExists(target);
     const fullOptions = Object.assign({
@@ -30,6 +32,22 @@ export class XMLChild {
     fullOptions.name = options.name || key;
 
     element.addChild(new XMLChild(fullOptions as IFullXMLChildOptions));
+  }
+
+  static createXmlChild(options: ICustomXMLChildOptions): XMLChild {
+    const hasGetter = typeof options.getter === 'function';
+    const hasValue = options.value !== void 0;
+
+    if ((hasGetter && hasValue) || (!hasGetter && !hasValue)) {
+
+      throw new Error(`Either a getter or a value has to be defined for attribute "${options.name}".`);
+    }
+
+    const fullOptions = Object.assign({
+      getter: createCustomGetter(options),
+    }, options);
+
+    return new XMLChild(fullOptions);
   }
 
   setSchema(target: any, parentEntity: any, isAsync: boolean = false): any {

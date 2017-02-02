@@ -1,15 +1,17 @@
 import {XMLElement} from "./XMLElement";
 import {IXMLAttributeOptions} from "../interfaces/IXMLAttributeOptions";
 import {IFullXMLAttributeOptions} from "../interfaces/IFullXMLAttributeOptions";
+import {ICustomXMLAttributeOptions} from "../interfaces/ICustomXMLAttributeOptions";
+import {createCustomGetter} from "../utils";
 
 export class XMLAttribute {
 
   private name: string;
 
-  static process(target: any,
-                 key: string,
-                 options: IXMLAttributeOptions = {},
-                 descriptor?: TypedPropertyDescriptor<any>): void {
+  static annotate(target: any,
+                  key: string,
+                  options: IXMLAttributeOptions = {},
+                  descriptor?: TypedPropertyDescriptor<any>): void {
 
     const element = XMLElement.getOrCreateIfNotExists(target);
     const fullOptions = Object.assign({
@@ -24,6 +26,22 @@ export class XMLAttribute {
     fullOptions.name = options.name || key;
 
     element.addAttribute(new XMLAttribute(fullOptions as IFullXMLAttributeOptions));
+  }
+
+  static createAttribute(options: ICustomXMLAttributeOptions): XMLAttribute {
+    const hasGetter = typeof options.getter === 'function';
+    const hasValue = options.value !== void 0;
+
+    if ((hasGetter && hasValue) || (!hasGetter && !hasValue)) {
+
+      throw new Error(`Either a getter or a value has to be defined for attribute "${options.name}".`);
+    }
+
+    const fullOptions = Object.assign({
+      getter: createCustomGetter(options),
+    }, options);
+    
+    return new XMLAttribute(fullOptions);
   }
 
   setSchema(target: any, entity: any): void {
