@@ -5,7 +5,7 @@ import {Hobby, HOBBY_NS} from "../models/Hobby";
 import {XMLElement} from "../../lib/models/XMLElement";
 import {ns, ATTRIBUTE_PROPERTY} from "../../lib/utils";
 
-const elisa = new Person('Elisa', 'Perfect', 25);
+const elisa = new Person('Elisa', '_', 25);
 const robin = new Person('Robin', 'Buschmann', 29);
 const hobbies = [
   new Hobby('reading', 'loves to read books, magazines and web articles'),

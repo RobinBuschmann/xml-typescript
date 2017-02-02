@@ -5,7 +5,7 @@
 Decorators for xml serialization. Uses [js2xmlparser](https://www.npmjs.com/package/js2xmlparser)
 under the hood.
 
-## Use decorators
+## Usage of decorators
 
 ```typescript
 import {XMLElement, XMLAttribute, XMLChild, xml} from 'xml-decorators';
@@ -83,7 +83,7 @@ const bob2Xml = xml.serialize('great-person', bob);
 ### Result
 ```xml
 <?xml version='1.0'?>
-<person ps:firstname='Bob' ps:fullname='Bob Mad' ps:age='29'>
+<great-person ps:firstname='Bob' ps:fullname='Bob Mad' ps:age='29'>
     <ps:hobby h:name='reading' h:description='loves to read books, magazines and web articles'/>
     <ps:hobby h:name='listening to Music' h:description='loves to listen to rock music'/>
     <ps:hobby h:name='travelling' h:description='loves to travel around the world'/>
@@ -91,7 +91,7 @@ const bob2Xml = xml.serialize('great-person', bob);
         <pet>dog</pet>
         <pet>cat</pet>
     </pets>
-</person>
+</great-person>
 ```
 
 ### Async
@@ -106,8 +106,6 @@ xml
 If you want to retrieve the "js2xmlparser" schema instead:
 ```typescript
 xml.getSchema(bob);
-xml.getSchema('root', bob);
 xml.getSchemaAsync(bob) .then(/* */);
-xml.getSchemaAsync('root', bob).then(/* */);
 ```
 

@@ -2,6 +2,10 @@ import 'es6-shim';
 import {XMLElement} from "./XMLElement";
 import * as _ from "lodash";
 import {ns} from "../utils";
+import {IXMLChildOptions} from "../interfaces/IXMLChildOptions";
+import {IFullXMLChildOptions} from "../interfaces/IFullXMLChildOptions";
+
+type Tree = {name: string; attributes: {[name: string]: string}};
 
 export class XMLChild {
 
@@ -9,22 +13,23 @@ export class XMLChild {
 
   static process(target: any,
                  key: string,
-                 options: any = {},
+                 options: IXMLChildOptions = {},
                  descriptor?: TypedPropertyDescriptor<any>): void {
 
-    const element = XMLElement.getXMLElement(target);
+    const element = XMLElement.getOrCreateIfNotExists(target);
+    const fullOptions = Object.assign({
+      getter(entity: any): any {
+        if (descriptor && descriptor.get) {
+          return descriptor.get.call(entity);
+        }
 
-    options.name = options.name || key;
-    options.getter = entity => {
-
-      if (descriptor) {
-        return descriptor.get.call(entity);
+        return entity[key];
       }
+    }, options);
 
-      return entity[key];
-    };
+    fullOptions.name = options.name || key;
 
-    element.addChild(new XMLChild(options));
+    element.addChild(new XMLChild(fullOptions as IFullXMLChildOptions));
   }
 
   setSchema(target: any, parentEntity: any, isAsync: boolean = false): any {
@@ -34,7 +39,7 @@ export class XMLChild {
 
       if (schema !== void 0 && schema !== null) {
 
-        const structure: string = this.options.implicitStructure;
+        const structure: string|undefined = this.options.implicitStructure;
         if (structure) {
 
           // a schema can be an array or an object,
@@ -70,7 +75,7 @@ export class XMLChild {
     }
   }
 
-  private constructor(private options: any) {
+  private constructor(private options: IFullXMLChildOptions) {
 
     this.name = options.name;
 
@@ -122,10 +127,10 @@ export class XMLChild {
     }
   }
 
-  private getImplicitNodeTree(treeString: string): Array<{name: string; attributes: {[name: string]: string}}> {
+  private getImplicitNodeTree(treeString: string): Tree[] {
     const REGEX = new RegExp('([a-z\\w0-9-\\$\\:]+?)\\[(.*?)\\]|([a-z\\w0-9-\\$\\:]+)', 'gi');
     let match = REGEX.exec(treeString);
-    const tree = [];
+    const tree: Tree[] = [];
 
     while (match !== null) {
 

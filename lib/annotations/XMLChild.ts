@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import {XMLChild as XMLChildModel} from "../models/XMLChild";
+import {IXMLChildOptions} from "../interfaces/IXMLChildOptions";
 
 export function XMLChild(target: any, key: string, descriptor?: TypedPropertyDescriptor<any>): void;
-export function XMLChild(options: any): Function;
+export function XMLChild(options: IXMLChildOptions): Function;
 export function XMLChild(...args: any[]): void|Function {
 
   if (args.length === 1) {

@@ -4,6 +4,14 @@ import {XMLChild} from "./XMLChild";
 import {XMLAttribute} from "./XMLAttribute";
 import * as js2xmlparser from 'js2xmlparser';
 import {ATTRIBUTE_PROPERTY} from "../utils";
+import {IXMLElementOptions} from "../interfaces/IXMLElementOptions";
+
+const PARSER_OPTIONS = {
+  declaration: {
+    encoding: 'UTF-8'
+  }
+};
+const META_KEY = 'xml:element';
 
 export class XMLElement {
 
@@ -18,7 +26,7 @@ export class XMLElement {
     const {root, entity} = this.getRootAndEntity(args);
     const schema = this.getSchema(entity);
 
-    return js2xmlparser.parse(root, schema);
+    return js2xmlparser.parse(root, schema, PARSER_OPTIONS);
   }
 
   static serializeAsync(entity: any): Promise<string>;
@@ -28,7 +36,7 @@ export class XMLElement {
     const {root, entity} = this.getRootAndEntity(args);
 
     return this.getSchemaAsync(entity)
-      .then(schema => js2xmlparser.parse(root, schema))
+      .then(schema => js2xmlparser.parse(root, schema, PARSER_OPTIONS))
       ;
   }
 
@@ -63,22 +71,31 @@ export class XMLElement {
     return processAsync(arg);
   }
 
-  static getXMLElement(target: any, createIfNotExist: boolean = true): XMLElement {
-    const REFLECT_KEY = 'xml:element';
-    let element = Reflect.getMetadata(REFLECT_KEY, target);
+  static getXMLElement(target: any): XMLElement|undefined {
 
-    if (!element && createIfNotExist) {
+    return Reflect.getMetadata(META_KEY, target);
+  }
+
+  static setXMLElement(target: any, element: XMLElement): void {
+
+    return Reflect.defineMetadata(META_KEY, element, target);
+  }
+
+  static getOrCreateIfNotExists(target: any): XMLElement {
+    let element = this.getXMLElement(target);
+
+    if (!element) {
 
       element = new XMLElement();
-      Reflect.defineMetadata(REFLECT_KEY, element, target);
+      this.setXMLElement(target, element);
     }
 
     return element;
   }
 
-  static process(target: any, options: any): void {
+  static annotate(target: any, options: IXMLElementOptions): void {
 
-    let element = this.getXMLElement(target);
+    let element = this.getOrCreateIfNotExists(target);
 
     element.root = options.root;
   }
@@ -86,7 +103,7 @@ export class XMLElement {
   private static processSchema(entity: any, isAsync: boolean): any {
     if (entity && typeof entity === 'object') {
 
-      const element = XMLElement.getXMLElement(entity, false);
+      const element = XMLElement.getXMLElement(entity);
       if (element) {
 
         return element.getSchema(entity, isAsync);
@@ -107,7 +124,7 @@ export class XMLElement {
       entity = args[1];
     }
 
-    const element = this.getXMLElement(entity, false);
+    const element = this.getXMLElement(entity);
 
     if (!root && element && element.root) {
       root = element.root;

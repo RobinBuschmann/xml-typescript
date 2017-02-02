@@ -1,4 +1,6 @@
 import {XMLElement} from "./XMLElement";
+import {IXMLAttributeOptions} from "../interfaces/IXMLAttributeOptions";
+import {IFullXMLAttributeOptions} from "../interfaces/IFullXMLAttributeOptions";
 
 export class XMLAttribute {
 
@@ -6,22 +8,22 @@ export class XMLAttribute {
 
   static process(target: any,
                  key: string,
-                 options: any = {},
+                 options: IXMLAttributeOptions = {},
                  descriptor?: TypedPropertyDescriptor<any>): void {
 
-    const element = XMLElement.getXMLElement(target);
-
-    options.name = options.name || key;
-    options.getter = entity => {
-
-      if (descriptor) {
-        return descriptor.get.call(entity);
+    const element = XMLElement.getOrCreateIfNotExists(target);
+    const fullOptions = Object.assign({
+      getter(entity: any): any {
+        if (descriptor && descriptor.get) {
+          return descriptor.get.call(entity);
+        }
+        return entity[key];
       }
+    }, options);
 
-      return entity[key];
-    };
+    fullOptions.name = options.name || key;
 
-    element.addAttribute(new XMLAttribute(options));
+    element.addAttribute(new XMLAttribute(fullOptions as IFullXMLAttributeOptions));
   }
 
   setSchema(target: any, entity: any): void {
@@ -30,13 +32,13 @@ export class XMLAttribute {
 
     if (value !== void 0) {
       target[this.name] = value;
-    } else if (this.options.mandatory) {
+    } else if (this.options.required) {
 
-      throw new Error(`Attribute ${this.name} is mandatory, but empty.`);
+      throw new Error(`Attribute ${this.name} is required, but empty.`);
     }
   }
 
-  private constructor(private options: any) {
+  private constructor(private options: IFullXMLAttributeOptions) {
 
     this.name = options.name;
 

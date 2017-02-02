@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "sourceMap": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
     "pretty": true,
     "lib": ["es6"]

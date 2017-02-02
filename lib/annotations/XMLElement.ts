@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import {XMLElement as XMLElementModel} from "../models/XMLElement";
+import {IXMLElementOptions} from "../interfaces/IXMLElementOptions";
 
-export function XMLElement(options: any): Function {
+export function XMLElement(options: IXMLElementOptions): Function {
 
   return (target: any) => {
 
-    return XMLElementModel.process(target.prototype, options);
+    return XMLElementModel.annotate(target.prototype, options);
   };
 }
