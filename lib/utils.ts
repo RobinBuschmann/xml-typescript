@@ -1,5 +1,5 @@
 
-export const ATTRIBUTE_PROPERTY = '@';
+export const DEFAULT_ATTRIBUTE_PROPERTY = '@';
 
 export function ns(namepsace: string, value: string): string {
 

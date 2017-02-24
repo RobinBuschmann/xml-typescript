@@ -3,8 +3,9 @@ import * as Promise from "bluebird";
 import {XMLChild} from "./XMLChild";
 import {XMLAttribute} from "./XMLAttribute";
 import * as js2xmlparser from 'js2xmlparser';
-import {ATTRIBUTE_PROPERTY} from "../utils";
+import {DEFAULT_ATTRIBUTE_PROPERTY} from "../utils";
 import {IXMLElementOptions} from "../interfaces/IXMLElementOptions";
+import {ISchemaOptions} from "../interfaces/ISchemaOptions";
 
 const PARSER_OPTIONS = {
   declaration: {
@@ -40,26 +41,26 @@ export class XMLElement {
       ;
   }
 
-  static getSchema(entities: any[]): any;
-  static getSchema(entity: any): any;
-  static getSchema(arg: any): any {
+  static getSchema(entities: any[], schemaOptions?: ISchemaOptions): any;
+  static getSchema(entity: any, schemaOptions?: ISchemaOptions): any;
+  static getSchema(arg: any, schemaOptions: ISchemaOptions = {}): any {
 
     if (arg === void 0) return;
 
     if (Array.isArray(arg)) {
 
-      return arg.map(entity => this.processSchema(entity, false));
+      return arg.map(entity => this.processSchema(entity, false, schemaOptions));
     }
-    return this.processSchema(arg, false);
+    return this.processSchema(arg, false, schemaOptions);
   }
 
-  static getSchemaAsync(entities: any[]): Promise<any>;
-  static getSchemaAsync(entity: any): Promise<any>;
-  static getSchemaAsync(arg: any): Promise<any> {
+  static getSchemaAsync(entities: any[], schemaOptions?: ISchemaOptions): Promise<any>;
+  static getSchemaAsync(entity: any, schemaOptions?: ISchemaOptions): Promise<any>;
+  static getSchemaAsync(arg: any, schemaOptions: ISchemaOptions = {}): Promise<any> {
 
     const processAsync = (entity: any) => {
 
-      return Promise.resolve(this.processSchema(entity, true));
+      return Promise.resolve(this.processSchema(entity, true, schemaOptions));
     };
 
     if (arg === void 0) Promise.resolve();
@@ -100,13 +101,15 @@ export class XMLElement {
     element.root = options.root;
   }
 
-  private static processSchema(entity: any, isAsync: boolean): any {
+  private static processSchema(entity: any,
+                               isAsync: boolean,
+                               schemaOptions: ISchemaOptions): any {
     if (entity && typeof entity === 'object') {
 
       const element = XMLElement.getXMLElement(entity);
       if (element) {
 
-        return element.getSchema(entity, isAsync);
+        return element.getSchema(entity, isAsync, schemaOptions);
       }
     }
     return entity;
@@ -150,17 +153,18 @@ export class XMLElement {
     this.children.push(child);
   }
 
-  private getSchema(entity: any, isAsync: boolean): void {
+  private getSchema(entity: any, isAsync: boolean, schemaOptions: ISchemaOptions): void {
 
     const object: any = {};
+    const attrProperty = schemaOptions.attrContainerName || DEFAULT_ATTRIBUTE_PROPERTY;
 
     if (this.attributes) {
-      object['@'] = {};
-      this.attributes.forEach(attr => attr.setSchema(object[ATTRIBUTE_PROPERTY], entity));
+      object[attrProperty] = {};
+      this.attributes.forEach(attr => attr.setSchema(object[attrProperty], entity));
     }
 
     if (this.children) {
-      this.children.forEach(child => child.setSchema(object, entity, isAsync));
+      this.children.forEach(child => child.setSchema(object, entity, isAsync, schemaOptions));
     }
 
     return object;

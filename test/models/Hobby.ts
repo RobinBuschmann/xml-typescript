@@ -5,7 +5,7 @@ export const HOBBY_NS = 'h';
 export class Hobby {
 
   @XMLAttribute({namespace: 'xmlns'})
-  private h: string = 'http://hobby.example.com';
+  readonly h: string = 'http://hobby.example.com';
 
   @XMLAttribute({namespace: HOBBY_NS})
   private name: string;

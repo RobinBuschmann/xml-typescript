@@ -6,6 +6,7 @@ import {IXMLChildOptions} from "../interfaces/IXMLChildOptions";
 import {IFullXMLChildOptions} from "../interfaces/IFullXMLChildOptions";
 import {ICustomXMLChildOptions} from "../interfaces/ICustomXMLChildOptions";
 import {createCustomGetter} from "../utils";
+import {ISchemaOptions} from "../interfaces/ISchemaOptions";
 
 type Tree = {name: string; attributes: {[name: string]: string}};
 
@@ -50,7 +51,7 @@ export class XMLChild {
     return new XMLChild(fullOptions);
   }
 
-  setSchema(target: any, parentEntity: any, isAsync: boolean = false): any {
+  setSchema(target: any, parentEntity: any, isAsync: boolean = false, schemaOptions: ISchemaOptions): any {
 
     const entity = this.options.getter.call(null, parentEntity);
     const process = (schema: any) => {
@@ -85,11 +86,11 @@ export class XMLChild {
 
     if (isAsync) {
 
-      XMLElement.getSchemaAsync(entity)
+      XMLElement.getSchemaAsync(entity, schemaOptions)
         .then(schema => process(schema));
     } else {
 
-      process(XMLElement.getSchema(entity));
+      process(XMLElement.getSchema(entity, schemaOptions));
     }
   }
 
