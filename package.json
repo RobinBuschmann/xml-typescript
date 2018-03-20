@@ -37,6 +37,6 @@
     "chai": "3.5.0",
     "mocha": "3.2.0",
     "tslint": "4.0.2",
-    "typescript": "2.0.10"
+    "typescript": "~2.4.2"
   }
 }
