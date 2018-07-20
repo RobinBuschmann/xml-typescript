@@ -24,9 +24,8 @@
   "dependencies": {
     "@types/bluebird": "3.5.22",
     "@types/lodash": "~4.14.42",
-    "@types/reflect-metadata": "0.1.0",
     "bluebird": "3.5.1",
-    "es6-shim": "0.35.2",
+    "es6-shim": "0.35.3",
     "js2xmlparser": "3.0.0",
     "lodash": "4.17.10"
   },
