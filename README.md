@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/RobinBuschmann/xml-typescript.png?branch=master)](https://travis-ci.org/RobinBuschmann/xml-typescript)
 
+[![Dependencies status](https://david-dm.org/RobinBuschmann/xml-typescript.svg)](https://david-dm.org/RobinBuschmann/xml-typescript.svg)
+
 # xml-decorators
 
 Decorators for xml serialization. Uses [js2xmlparser](https://www.npmjs.com/package/js2xmlparser)
