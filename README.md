@@ -108,6 +108,6 @@ xml
 If you want to retrieve the "js2xmlparser" schema instead:
 ```typescript
 xml.getSchema(bob);
-xml.getSchemaAsync(bob) .then(/* */);
+xml.getSchemaAsync(bob).then(/* */);
 ```
 
