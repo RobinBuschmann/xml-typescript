@@ -4,6 +4,9 @@
 # ide
 .idea
 
+# vscode
+.vscode
+
 # libraries
 node_modules
 

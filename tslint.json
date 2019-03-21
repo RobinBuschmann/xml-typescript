@@ -21,12 +21,16 @@
       "parameter"
     ],
     "no-var-requires": false,
-    "quotemark": ["single"],
+    "quotemark": [true, "single"],
     "triple-equals": true,
     "member-ordering": [true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "public-before-private",
+          "static-before-instance",
+          "variables-before-functions"
+        ]
+      }
     ],
     "variable-name": [true,
       "ban-keywords",
