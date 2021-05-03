@@ -33,8 +33,7 @@ export class XMLAttribute {
     );
 
     fullOptions.name = options.name || key;
-    if (!element.hasAttribute(fullOptions.name))
-      element.addAttribute(new XMLAttribute(fullOptions as IFullXMLAttributeOptions));
+    element.addAttribute(new XMLAttribute(fullOptions as IFullXMLAttributeOptions));
   }
 
   static createAttribute(options: ICustomXMLAttributeOptions): XMLAttribute {

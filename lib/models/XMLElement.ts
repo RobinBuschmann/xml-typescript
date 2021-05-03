@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-// import * as Promise from "bluebird";
+import { Promise } from "bluebird";
 import { XMLChild } from './XMLChild';
 import { XMLAttribute } from './XMLAttribute';
 import * as js2xmlparser from 'js2xmlparser';
@@ -11,12 +11,7 @@ import merge from 'lodash.merge';
 const PARSER_OPTIONS = {
   declaration: {
     encoding: 'UTF-8',
-  },
-  useCDATA: true,
-  cdataKeys: ['*'],
-  format: {
-    doubleQuotes: true,
-  },
+  }
 };
 export const META_KEY = 'xml:element';
 
@@ -68,15 +63,13 @@ export class XMLElement {
     return processAsync(arg);
   }
 
-  static getXMLElement(target: any, root?: string): XMLElement | undefined {
-    const rootName = root ? root : Reflect.getMetadata(META_KEY, target);
-    return Reflect.getMetadata(rootName, target);
+  static getXMLElement(target: any): XMLElement | undefined {
+    return Reflect.getMetadata(META_KEY, target);
   }
 
-  static setXMLElement(target: any, ele: XMLElement, root: string): void {
-    Reflect.defineMetadata(META_KEY, root, target);
+  static setXMLElement(target: any, ele: XMLElement): void {
     let next = Object.getPrototypeOf(target);
-    let tempEle = null;
+    let tempEle: XMLElement | undefined;
     while (true) {
       tempEle = XMLElement.getXMLElement(next);
       if (typeof tempEle === 'undefined') {
@@ -87,7 +80,7 @@ export class XMLElement {
      
       if (oldAttrs.length) {
         merge(ele, {
-          attributes: tempEle.attributes?.filter((e) => oldAttrs.indexOf(e.name) === -1) || tempEle.attributes,
+          attributes: tempEle.attributes?.filter((e) => oldAttrs.indexOf(e.getName()) === -1) || tempEle.attributes,
         });
       } else {
         Object.assign(ele, {
@@ -97,7 +90,7 @@ export class XMLElement {
 
       if (oldChilds.length) {
         merge(ele, {
-          children: tempEle.children?.filter((e) => oldChilds.indexOf(e.name) === -1) || tempEle.children,
+          children: tempEle.children?.filter((e) => oldChilds.indexOf(e.getName()) === -1) || tempEle.children,
         });
       } else {
         Object.assign(ele, {
@@ -106,24 +99,25 @@ export class XMLElement {
       }
       next = Object.getPrototypeOf(next);
     }
-    return Reflect.defineMetadata(root, ele, target);
+    return Reflect.defineMetadata(META_KEY, ele, target);
   }
 
-  static getOrCreateIfNotExists(target: any, root?: string): XMLElement {
-    const rootName = root ? root : Reflect.getMetadata(META_KEY, target);
-    let element = this.getXMLElement(target, rootName);
-
+  static getOrCreateIfNotExists(target: any): XMLElement {
+    let element = this.getXMLElement(target);
     if (!element) {
       element = new XMLElement();
-      element.root = rootName;
-      this.setXMLElement(target, element, rootName);
+      this.setXMLElement(target, element);
     }
 
     return element;
   }
-
+  public getName(){
+    return this.root
+  }
   static annotate(target: any, options: IXMLElementOptions): void {
-    this.getOrCreateIfNotExists(target, options.root);
+    let element = this.getOrCreateIfNotExists(target);
+    element.root = options.root
+    Reflect.defineMetadata(META_KEY + ":name", options.root, target);
   }
 
   private static processSchema(entity: any, isAsync: boolean, schemaOptions: ISchemaOptions): any {
@@ -149,7 +143,6 @@ export class XMLElement {
     }
 
     const element = this.getXMLElement(entity);
-
     if (!root && element && element.root) {
       root = element.root;
     }
@@ -159,12 +152,7 @@ export class XMLElement {
 
     return { root, entity };
   }
-  hasAttribute(name: string): boolean {
-    if (!this.attributes) {
-      return false;
-    }
-    return this.attributes.filter((e) => e.getName() === name).length >= 1;
-  }
+  
   addAttribute(attribute: XMLAttribute): void {
     if (!this.attributes) this.attributes = [];
     this.attributes.push(attribute);

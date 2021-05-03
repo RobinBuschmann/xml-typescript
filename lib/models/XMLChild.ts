@@ -1,12 +1,13 @@
+import 'es6-shim';
 import { META_KEY, XMLElement } from './XMLElement';
-import merge from 'lodash.merge';
+import * as merge from 'lodash.merge';
 import { ns } from '../utils';
 import { IXMLChildOptions } from '../interfaces/IXMLChildOptions';
 import { IFullXMLChildOptions } from '../interfaces/IFullXMLChildOptions';
 import { ICustomXMLChildOptions } from '../interfaces/ICustomXMLChildOptions';
 import { createCustomGetter } from '../utils';
 import { ISchemaOptions } from '../interfaces/ISchemaOptions';
-import groupBy from 'lodash.groupby';
+import * as groupBy from 'lodash.groupby';
 
 type Tree = { name: string; attributes: { [name: string]: string } };
 
@@ -60,7 +61,7 @@ export class XMLChild {
   setSchema(target: any, parentEntity: any, isAsync: boolean = false, schemaOptions: ISchemaOptions): any {
     const entity = this.options.getter.call(null, parentEntity);
     if (this.options.virtual === true) {
-      Object.entries(groupBy(entity, (e) => Reflect.getMetadata(META_KEY, e))).forEach(([key, val]) => {
+      Object.entries(groupBy(entity, (e) => Reflect.getMetadata(META_KEY + ":name", e))).forEach(([key, val]) => {
         const properties = (val as any[]).map((item) => {
           let next = Object.getPrototypeOf(item);
           let temp = null;
@@ -68,7 +69,7 @@ export class XMLChild {
           const result = {};
           while (true) {
             temp = new next.constructor();
-            if (typeof XMLElement.getXMLElement(temp, key) === 'undefined') {
+            if (typeof XMLElement.getXMLElement(temp) === 'undefined') {
               break;
             }
             Object.assign(temp, item);
@@ -78,7 +79,6 @@ export class XMLChild {
           }
           return result;
         });
-
         target[key] = properties;
       });
       return;

@@ -64,7 +64,6 @@ describe("Person", () => {
       });
 
       it(`should have child hobbies named as "hobby"`, () => {
-
         expect(schema[ns(PERSON_NS, 'hobby')]).not.to.be.undefined;
         expect(schema[ns(PERSON_NS, 'hobby')].length).to.equal(hobbies.length);
       });
@@ -118,7 +117,9 @@ describe("Person", () => {
       it(`should result in the same schema value as schema from sync process`, () =>
         xml
           .getSchemaAsync(elisa)
-          .then(asyncSchema => expect(asyncSchema).to.deep.equal(schema))
+          .then(asyncSchema => {
+            expect(asyncSchema).to.deep.equal(schema)
+          })
       );
 
     });
