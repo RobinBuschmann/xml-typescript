@@ -1,5 +1,5 @@
 import 'es6-shim';
-import 'object.entries'
+import * as entries from 'object.entries'
 import { META_KEY, XMLElement } from './XMLElement';
 import * as merge from 'lodash.merge';
 import { ns } from '../utils';
@@ -62,7 +62,7 @@ export class XMLChild {
   setSchema(target: any, parentEntity: any, isAsync: boolean = false, schemaOptions: ISchemaOptions): any {
     const entity = this.options.getter.call(null, parentEntity);
     if (this.options.virtual === true) {
-      Object.entries(groupBy(entity, (e) => Reflect.getMetadata(META_KEY + ":name", e))).forEach(([key, val]) => {
+      entries(groupBy(entity, (e) => Reflect.getMetadata(META_KEY + ":name", e))).forEach(([key, val]) => {
         const properties = (val as any[]).map((item) => {
           let next = Object.getPrototypeOf(item);
           let temp = null;
