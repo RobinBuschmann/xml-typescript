@@ -64,21 +64,7 @@ export class XMLChild {
     if (this.options.virtual === true) {
       entries(groupBy(entity, (e) => Reflect.getMetadata(META_KEY + ":name", e))).forEach(([key, val]) => {
         const properties = (val as any[]).map((item) => {
-          let next = Object.getPrototypeOf(item);
-          let temp = null;
-          let ele = null;
-          const result = {};
-          while (true) {
-            temp = new next.constructor();
-            if (typeof XMLElement.getXMLElement(temp) === 'undefined') {
-              break;
-            }
-            Object.assign(temp, item);
-            ele = XMLElement.getSchema(temp);
-            merge(result, ele);
-            next = Object.getPrototypeOf(next);
-          }
-          return result;
+          return XMLElement.getSchema(item);
         });
         target[key] = properties;
       });

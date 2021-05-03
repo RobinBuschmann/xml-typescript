@@ -24,4 +24,12 @@ describe("virtual children", () => {
         expect(s).contains("<child_a");
         expect(s).contains("<child_b");
     })
+
+    it(`ChildA should have "Child_props" and "ChildA_props"`, () => {
+        const a = new Parent();
+        a.childs.push(new ChildA());
+        const s = xml.serialize(a);
+        expect(s).contains("Child_props='1'");
+        expect(s).contains("ChildA_props='2'");
+    })
 })

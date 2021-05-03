@@ -6,7 +6,6 @@ import * as js2xmlparser from 'js2xmlparser';
 import { DEFAULT_ATTRIBUTE_PROPERTY } from '../utils';
 import { IXMLElementOptions } from '../interfaces/IXMLElementOptions';
 import { ISchemaOptions } from '../interfaces/ISchemaOptions';
-import merge from 'lodash.merge';
 
 const PARSER_OPTIONS = {
   declaration: {
@@ -68,37 +67,6 @@ export class XMLElement {
   }
 
   static setXMLElement(target: any, ele: XMLElement): void {
-    let next = Object.getPrototypeOf(target);
-    let tempEle: XMLElement | undefined;
-    while (true) {
-      tempEle = XMLElement.getXMLElement(next);
-      if (typeof tempEle === 'undefined') {
-        break;
-      }
-      const oldAttrs = ele.attributes?.map((e) => e.getName()) || [];
-      const oldChilds = ele.children?.map((e) => e.getName()) || [];
-     
-      if (oldAttrs.length) {
-        merge(ele, {
-          attributes: tempEle.attributes?.filter((e) => oldAttrs.indexOf(e.getName()) === -1) || tempEle.attributes,
-        });
-      } else {
-        Object.assign(ele, {
-          attributes: tempEle.attributes && tempEle.attributes.length ? tempEle.attributes : [],
-        });
-      }
-
-      if (oldChilds.length) {
-        merge(ele, {
-          children: tempEle.children?.filter((e) => oldChilds.indexOf(e.getName()) === -1) || tempEle.children,
-        });
-      } else {
-        Object.assign(ele, {
-          children: tempEle.children && tempEle.children.length ? tempEle.children : [],
-        });
-      }
-      next = Object.getPrototypeOf(next);
-    }
     return Reflect.defineMetadata(META_KEY, ele, target);
   }
 
