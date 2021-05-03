@@ -2,8 +2,8 @@ import 'es6-shim';
 import {expect} from 'chai';
 import {Person, PERSON_NS} from "../models/Person";
 import {Hobby, HOBBY_NS} from "../models/Hobby";
-import {xml, xmlAttribute, xmlChild} from "../../index";
-import {ns, DEFAULT_ATTRIBUTE_PROPERTY} from "../../lib/utils";
+import {xml, xmlAttribute, xmlChild} from "../../src/index";
+import {ns, DEFAULT_ATTRIBUTE_PROPERTY} from "../../src/utils";
 
 const elisa = new Person('Elisa', '_', 25);
 const robin = new Person('Robin', 'Buschmann', 29);
@@ -64,7 +64,6 @@ describe("Person", () => {
       });
 
       it(`should have child hobbies named as "hobby"`, () => {
-
         expect(schema[ns(PERSON_NS, 'hobby')]).not.to.be.undefined;
         expect(schema[ns(PERSON_NS, 'hobby')].length).to.equal(hobbies.length);
       });
@@ -118,7 +117,9 @@ describe("Person", () => {
       it(`should result in the same schema value as schema from sync process`, () =>
         xml
           .getSchemaAsync(elisa)
-          .then(asyncSchema => expect(asyncSchema).to.deep.equal(schema))
+          .then(asyncSchema => {
+            expect(asyncSchema).to.deep.equal(schema)
+          })
       );
 
     });
