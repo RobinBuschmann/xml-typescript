@@ -1,4 +1,5 @@
 import 'es6-shim';
+import 'object.entries'
 import { META_KEY, XMLElement } from './XMLElement';
 import * as merge from 'lodash.merge';
 import { ns } from '../utils';
