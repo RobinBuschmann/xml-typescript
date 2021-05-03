@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "test": "ts-mocha -p tsconfig.json  'test/specs/**/*.js'"
+    "test": "ts-mocha -p tsconfig.json  'test/specs/**/*.ts'"
   },
   "repository": {
     "type": "git",
