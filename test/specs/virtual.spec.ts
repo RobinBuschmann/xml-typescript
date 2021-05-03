@@ -1,8 +1,8 @@
 
 import {expect} from 'chai';
-import {XMLChild} from "../../lib/annotations/XMLChild";
-import { xml } from '../../';
-import {XMLElement} from "../../lib/annotations/XMLElement";
+import {XMLChild} from "../../src/annotations/XMLChild";
+import { xml } from '../../src';
+import {XMLElement} from "../../src/annotations/XMLElement";
 import { Child } from "../models/Child";
 import { ChildA } from "../models/ChildA";
 import { ChildB } from "../models/ChildB";

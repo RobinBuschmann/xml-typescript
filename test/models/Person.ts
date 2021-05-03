@@ -1,7 +1,7 @@
-import {XMLChild} from "../../lib/annotations/XMLChild";
-import {XMLElement} from "../../lib/annotations/XMLElement";
+import {XMLChild} from "../../src/annotations/XMLChild";
+import {XMLElement} from "../../src/annotations/XMLElement";
 import {Hobby} from "./Hobby";
-import {XMLAttribute} from "../../lib/annotations/XMLAttribute";
+import {XMLAttribute} from "../../src/annotations/XMLAttribute";
 
 export const PERSON_ROOT = 'person';
 export const PERSON_NS = 'ps';

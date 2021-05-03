@@ -2,11 +2,10 @@
   "name": "xml-decorators",
   "version": "1.0.6",
   "description": "Decorators for xml serialization",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "pretest": "npm run build",
-    "test": "mocha 'test/specs/**/*.js'"
+    "test": "ts-mocha -p tsconfig.json  'test/specs/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -36,6 +35,7 @@
     "chai": "4.1.2",
     "mocha": "5.2.0",
     "reflect-metadata": "^0.1.8",
+    "ts-mocha": "8.0.0",
     "tslint": "5.11.0",
     "typescript": "^3.9.3"
   }

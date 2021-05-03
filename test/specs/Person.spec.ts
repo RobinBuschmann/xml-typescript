@@ -2,8 +2,8 @@ import 'es6-shim';
 import {expect} from 'chai';
 import {Person, PERSON_NS} from "../models/Person";
 import {Hobby, HOBBY_NS} from "../models/Hobby";
-import {xml, xmlAttribute, xmlChild} from "../../index";
-import {ns, DEFAULT_ATTRIBUTE_PROPERTY} from "../../lib/utils";
+import {xml, xmlAttribute, xmlChild} from "../../src/index";
+import {ns, DEFAULT_ATTRIBUTE_PROPERTY} from "../../src/utils";
 
 const elisa = new Person('Elisa', '_', 25);
 const robin = new Person('Robin', 'Buschmann', 29);
