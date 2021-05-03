@@ -3,7 +3,7 @@
 
 # ide
 .idea
-
+yarn.lock
 # libraries
 node_modules
 

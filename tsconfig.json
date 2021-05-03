@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "noUnusedLocals": true,
-    "declaration": true,
+    "lib": ["es2019"],
+    "target": "es6",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "isolatedModules": false,
     "sourceMap": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
-    "pretty": true,
-    "lib": ["es6"]
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "lib/**/*",
